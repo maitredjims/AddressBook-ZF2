@@ -11,8 +11,9 @@ return array(
                 // cm => ControllerManager
                 $sm = $cm->getServiceLocator();
                 $contactService = $sm->get('AddressBook\Service\Contact');
+                $societeService = $sm->get('AddressBook\Service\Societe');
                 //$contactService = $sm->get('AddressBook\Service\ContactFake');
-                return new AddressBook\Controller\ContactController($contactService);
+                return new AddressBook\Controller\ContactController($contactService, $societeService);
             },
             'AddressBook\Controller\Societe' => function($cm) {
                 // cm => ControllerManager
@@ -86,7 +87,7 @@ return array(
                         'options' => array(
                             'route' => '/delete/:id',
                             'defaults' => array(
-                                'action' => 'update',
+                                'action' => 'delete',
                             ),
                             'constraints' => array(
                                 'id' => '[1-9][0-9]*'
@@ -146,7 +147,7 @@ return array(
                         'options' => array(
                             'route' => '/delete/:id',
                             'defaults' => array(
-                                'action' => 'update',
+                                'action' => 'delete',
                             ),
                             'constraints' => array(
                                 'id' => '[1-9][0-9]*'
