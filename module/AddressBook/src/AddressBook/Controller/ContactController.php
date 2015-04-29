@@ -5,6 +5,7 @@ namespace AddressBook\Controller;
 use AddressBook\Form\ContactForm;
 use AddressBook\InputFilter\ContactInputFilter;
 use AddressBook\Service\Contact\ContactServiceInterface;
+use AddressBook\Service\Societe\SocieteServiceInterface;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -51,8 +52,16 @@ class ContactController extends AbstractActionController
      */
     protected $contactService;
     
-    public function __construct(ContactServiceInterface $contactService) {
+    /**
+     *
+     * @var SocieteServiceInterface
+     */
+    protected $societeService;
+    
+
+    public function __construct(ContactServiceInterface $contactService, SocieteServiceInterface $societeService) {
         $this->contactService = $contactService;
+        $this->societeService = $societeService;
     }
 
     public function listAction()
@@ -93,6 +102,13 @@ class ContactController extends AbstractActionController
 //            }
 //        }
         
+        $societes= $this->societeService->getAll();
+        
+        // On enregistre les sociétés dans un tableau
+        foreach ($societes as $societe) {
+            $tabSociete[$societe->getId()] = $societe->getNom();
+        } 
+        
         if($this->request->isPost()) {
             
             $contact = $this->contactService->insert($form, $this->request->getPost());
@@ -106,7 +122,8 @@ class ContactController extends AbstractActionController
         }
         
         return new ViewModel(array(
-            'form' => $form
+            'form' => $form,
+            'societes' => $tabSociete
         ));
     }
 
@@ -129,14 +146,64 @@ class ContactController extends AbstractActionController
         ));
     }
 
-    public function modifyAction()
+    public function updateAction()
     {
-        return new ViewModel();
+        $id = (int) $this->params('id');
+        
+        if(!$id) {
+            return $this->redirect()->toRoute('contact');
+        }
+        
+        $contact = $this->contactService->getById($id);
+                
+        $form = new ContactForm();
+        $form->bind($contact);
+        
+        $societes= $this->societeService->getAll();
+        
+        // On enregistre les sociétés dans un tableau
+        foreach ($societes as $societe) {
+            $tabSociete[$societe->getId()] = $societe->getNom();
+        }        
+        
+        if($this->request->isPost()) {
+            $contact_update = $this->contactService->update($id, $form, $this->request->getPost());
+            
+            if($contact_update) {
+                return $this->redirect()->toRoute('contact');
+            }
+        }
+        
+        return new ViewModel(array(
+            'form' => $form,
+            'societes' => $tabSociete,
+        ));
     }
 
     public function deleteAction()
     {
-        return new ViewModel();
+        $id = (int) $this->params('id');
+        
+        if(!$id) {
+            return $this->redirect()->toRoute('contact');
+        }
+        
+        if ($this->request->isPost()) {
+            $del = $this->request->getPost('del', 'Non');
+
+            if ($del == 'Oui') {
+                $id = (int) $this->request->getPost('id');
+                $this->contactService->delete($id);
+            }
+
+            // Redirect to list of contact
+            return $this->redirect()->toRoute('contact');
+        }
+
+        return array(
+            'id' => $id,
+            'contact' => $this->contactService->getById($id)
+        );
     }
 
 
