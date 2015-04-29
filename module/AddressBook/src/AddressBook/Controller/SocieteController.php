@@ -3,7 +3,7 @@
 namespace AddressBook\Controller;
 
 use AddressBook\Service\Societe\SocieteServiceInterface;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
+use AddressBook\Form\SocieteForm;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -50,6 +50,27 @@ class SocieteController extends AbstractActionController
         
         return new ViewModel(array(
             'societe' => $societe
+        ));
+    }
+    
+    public function addAction()
+    {
+        $form = new SocieteForm();        
+        
+        if($this->request->isPost()) {
+            
+            $contact = $this->societeService->insert($form, $this->request->getPost());
+            
+            if($contact) {
+                $this->flashMessenger()->addSuccessMessage('La société a bien été inséré');
+            
+                return $this->redirect()->toRoute('societe');
+            }
+            
+        }
+        
+        return new ViewModel(array(
+            'form' => $form
         ));
     }
 }
