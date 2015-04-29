@@ -32,7 +32,23 @@ class SocieteDoctrineService implements SocieteServiceInterface
     }
 
     public function insert(\Zend\Form\Form $form, $dataAssoc) {
+        $societe = new Societe();
+
+        $hydrator = new DoctrineObject($this->em);
+        $form->setHydrator($hydrator);
+
+        $form->bind($societe);
+        $form->setInputFilter(new SocieteInputFilter());
+        $form->setData($dataAssoc);
+
+        if (!$form->isValid()) {
+            return null;
+        }
         
+        $this->em->persist($societe);
+        $this->em->flush();
+        
+        return $societe;
     }
 
     public function update($id, \Zend\Form\Form $form, $dataAssoc) {
