@@ -1,0 +1,85 @@
+<?php
+$this->headTitle('Ajouter un contact')
+?>
+<?php $this->headStyle()->captureStart() ?>
+/*
+label, input {
+    display: block;
+}
+*/
+<?php $this->headStyle()->captureEnd() ?>
+<h2><?php echo $this->translate('Ajouter un contact'); ?></h2>
+<?php //echo $this->form($form); ?>
+<!--
+<form class="form-horizontal">
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+    <div class="col-sm-10">
+      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"> Remember me
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Sign in</button>
+    </div>
+  </div>
+</form>
+-->
+<?=$this->form()->openTag($form->setAttribute('class', 'form-horizontal')->setAttribute('novalidate', 'novalidate'))?>
+<div class="form-group <?php if($form->get('prenom')->getMessages()) echo "has-error"; ?>">
+    <?=$this->formLabel($form->get('prenom')->setLabelAttributes(array('class' => 'col-sm-2 control-label')))?>
+    <div class="col-sm-10">
+        <?=$this->formElement($form->get('prenom')->setAttribute('class', 'form-control'))?>
+    </div>
+    <span class="help-block">
+        <?=$this->formElementErrors($form->get('prenom'))?>
+    </span>
+</div>
+<div class="form-group <?php if($form->get('nom')->getMessages()) echo "has-error"; ?>">
+    <?=$this->formLabel($form->get('nom')->setLabelAttributes(array('class' => 'col-sm-2 control-label')))?>
+    <div class="col-sm-10">
+        <?=$this->formElement($form->get('nom')->setAttribute('class', 'form-control'))?>
+    </div>
+    <span class="help-block">
+        <?=$this->formElementErrors($form->get('nom'))?>
+    </span>
+</div>
+<div class="form-group <?php if($form->get('email')->getMessages()) echo "has-error"; ?>">
+    <?=$this->formLabel($form->get('email')->setLabelAttributes(array('class' => 'col-sm-2 control-label')))?>
+    <div class="col-sm-10">
+        <?=$this->formEmail($form->get('email')->setAttribute('class', 'form-control'))?>
+    </div>
+    <span class="help-block">
+        <?=$this->formElementErrors($form->get('email'))?>
+    </span>
+</div>
+<div class="form-group <?php if($form->get('telephone')->getMessages()) echo "has-error"; ?>">
+    <?=$this->formLabel($form->get('telephone')->setLabelAttributes(array('class' => 'col-sm-2 control-label')))?>
+    <div class="col-sm-10">
+        <?=$this->formTel($form->get('telephone')->setAttribute('class', 'form-control'))?>
+    </div>
+    <span class="help-block">
+        <?=$this->formElementErrors($form->get('telephone'))?>
+    </span>
+</div>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

@@ -1,0 +1,28 @@
+<?php
+$this->headTitle('Liste des contacts');
+?>
+<?php $this->headStyle()->captureStart() ?>
+h1 {
+    text-decoration: underline;
+}
+<?php $this->headStyle()->captureEnd() ?>
+<?php $this->inlineScript()->captureStart() ?>
+//alert('Coucou');
+<?php $this->inlineScript()->captureEnd() ?>
+<?php foreach($this->flashMessenger()->getSuccessMessages() as $m): ?>
+<?=$this->bootstrapAlert($m)?>
+<?php endforeach; ?>
+<?php //echo $this->bootstrapAlert('Coucou'); ?>
+<h1>Liste des contacts</h1>
+<table class="table table-striped">
+    <?php foreach ($contacts as $ctc): ?>
+    <tr>
+        <td>
+            <?=$this->escapeHtml($ctc->getPrenom())?> <?=$this->escapeHtml($ctc->getNom())?>
+        </td>
+        <td>
+            <a href="<?=$this->url('contact/show', array('id' => $this->escapeUrl($ctc->getId())))?>" class="btn btn-primary btn-xs">Détails</a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+</table>
