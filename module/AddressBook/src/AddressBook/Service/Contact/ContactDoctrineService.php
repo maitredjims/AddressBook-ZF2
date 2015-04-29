@@ -61,4 +61,12 @@ class ContactDoctrineService implements ContactServiceInterface {
         
         return $contact;
     }
+    
+    public function update($id, \Zend\Form\Form $form, $dataAssoc) {
+        
+    }
+    
+    public function delete($id) {
+        
+    }
 } 
