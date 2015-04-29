@@ -8,7 +8,7 @@ label, input {
 }
 */
 <?php $this->headStyle()->captureEnd() ?>
-<h2><?php echo $this->translate('Ajouter un contact'); ?></h2>
+<h2><?php echo $this->translate('Ajouter une société'); ?></h2>
 <?=$this->form()->openTag($form->setAttribute('class', 'form-horizontal')->setAttribute('novalidate', 'novalidate'))?>
 <div class="form-group <?php if($form->get('nom')->getMessages()) echo "has-error"; ?>">
     <?=$this->formLabel($form->get('nom')->setLabelAttributes(array('class' => 'col-sm-2 control-label')))?>
