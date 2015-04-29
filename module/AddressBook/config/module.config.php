@@ -14,6 +14,13 @@ return array(
                 //$contactService = $sm->get('AddressBook\Service\ContactFake');
                 return new AddressBook\Controller\ContactController($contactService);
             },
+            'AddressBook\Controller\Societe' => function($cm) {
+                // cm => ControllerManager
+                $sm = $cm->getServiceLocator();
+                $societeService = $sm->get('AddressBook\Service\Societe');
+                //$contactService = $sm->get('AddressBook\Service\ContactFake');
+                return new AddressBook\Controller\SocieteController($societeService);
+            },
         ),
     ),
     'router' => array(
@@ -62,6 +69,90 @@ return array(
                             ),
                         ),
                     ),
+                    'update' => array(
+                        'type' => \Zend\Mvc\Router\Http\Segment::class,
+                        'options' => array(
+                            'route' => '/update/:id',
+                            'defaults' => array(
+                                'action' => 'update',
+                            ),
+                            'constraints' => array(
+                                'id' => '[1-9][0-9]*'
+                            ),
+                        ),
+                    ),
+                    'delete' => array(
+                        'type' => \Zend\Mvc\Router\Http\Segment::class,
+                        'options' => array(
+                            'route' => '/delete/:id',
+                            'defaults' => array(
+                                'action' => 'update',
+                            ),
+                            'constraints' => array(
+                                'id' => '[1-9][0-9]*'
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            'societe' => array(
+                'type' => \Zend\Mvc\Router\Http\Literal::class,
+                'options' => array(
+                    'route' => '/societe',
+                    'defaults' => array(
+                        'controller' => 'AddressBook\Controller\Societe',
+                        'action' => 'list',
+                    ),
+                ),
+                // indique au routeur s'il y a un segment à suivre
+                'may_terminate' => true,
+                // routes enfants de /contact
+                'child_routes' => array(
+                    'add' => array(
+                        'type' => \Zend\Mvc\Router\Http\Literal::class,
+                        'options' => array(
+                            'route' => '/add',
+                            'defaults' => array(
+                                'action' => 'add',
+                            ),
+                        ),
+                    ),
+                    'show' => array(
+                        'type' => Zend\Mvc\Router\Http\Segment::class,
+                        'options' => array(
+                            'route' => '/:id',
+                            'defaults' => array(
+                                'action' => 'show',
+                            ),
+                            'constraints' => array(
+                                'id' => '[1-9][0-9]*'
+                            ),
+                        ),
+                    ),
+                    'update' => array(
+                        'type' => \Zend\Mvc\Router\Http\Segment::class,
+                        'options' => array(
+                            'route' => '/update/:id',
+                            'defaults' => array(
+                                'action' => 'update',
+                            ),
+                            'constraints' => array(
+                                'id' => '[1-9][0-9]*'
+                            ),
+                        ),
+                    ),
+                    'delete' => array(
+                        'type' => \Zend\Mvc\Router\Http\Segment::class,
+                        'options' => array(
+                            'route' => '/delete/:id',
+                            'defaults' => array(
+                                'action' => 'update',
+                            ),
+                            'constraints' => array(
+                                'id' => '[1-9][0-9]*'
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -101,6 +192,13 @@ return array(
                 
                 $om = $sm->get('Doctrine\ORM\EntityManager');
                 $service = new \AddressBook\Service\Contact\ContactDoctrineService($om);
+        
+                return $service;
+            },
+            'AddressBook\Service\SocieteDoctrineORM' => function($sm) {
+                
+                $om = $sm->get('Doctrine\ORM\EntityManager');
+                $service = new \AddressBook\Service\Societe\SocieteDoctrineService($om);
         
                 return $service;
             },
