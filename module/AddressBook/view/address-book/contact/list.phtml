@@ -23,6 +23,12 @@ h1 {
         <td>
             <a href="<?=$this->url('contact/show', array('id' => $this->escapeUrl($ctc->getId())))?>" class="btn btn-primary btn-xs">Détails</a>
         </td>
+        <td>
+            <a href="<?=$this->url('contact/update', array('id' => $this->escapeUrl($ctc->getId())))?>" class="btn btn-primary btn-xs">Modifier</a>
+        </td>
+        <td>
+            <a href="<?=$this->url('contact/delete', array('id' => $this->escapeUrl($ctc->getId())))?>" class="btn btn-primary btn-xs">Supprimer</a>
+        </td>
     </tr>
     <?php endforeach; ?>
 </table>
