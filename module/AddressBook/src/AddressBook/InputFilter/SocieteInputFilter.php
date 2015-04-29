@@ -26,7 +26,7 @@ class SocieteInputFilter extends InputFilter {
 
         $this->add($input);
         
-        $input = new \Zend\InputFilter\Input('site_web');
+        $input = new \Zend\InputFilter\Input('siteWeb');
 
         // Trim du site_web
         $filter = new \Zend\Filter\StringTrim();
