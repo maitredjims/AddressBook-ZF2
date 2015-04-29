@@ -63,10 +63,31 @@ class ContactDoctrineService implements ContactServiceInterface {
     }
     
     public function update($id, \Zend\Form\Form $form, $dataAssoc) {
+        $contact = $this->em->find('AddressBook\Entity\Contact', $id);
         
+        $hydrator = new DoctrineObject($this->em);
+        
+        $form->setHydrator($hydrator);
+        $form->bind($contact);
+        $form->setInputFilter(new ContactInputFilter());
+        $form->setData($dataAssoc);
+        
+        if (!$form->isValid()) {
+            return null;
+        }     
+        
+        $this->em->persist($contact);
+        $this->em->flush();
+        
+        return $contact;
     }
     
     public function delete($id) {
+        $contact = $this->em->find('AddressBook\Entity\Contact', $id);
         
+        $this->em->remove($contact);
+        $this->em->flush();
+        
+        return $contact;
     }
 } 
