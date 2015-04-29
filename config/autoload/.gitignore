@@ -1,2 +1,6 @@
 local.php
 *.local.php
+!/service.local.php
+!/view.local.php
+!/zenddevelopertools.local.php
+!/db.local.php
