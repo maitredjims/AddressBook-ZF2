@@ -1,0 +1,13 @@
+<?php
+$title = 'Détails d\'une société'; 
+$this->headTitle($title);
+?>
+<h2><?php echo $this->escapeHtml($title); ?></h2>
+<p>
+    Nom de la société : <?=$this->escapeHtml($societe->getNom())?>
+</p>
+<?php if($societe->getsiteWeb()) :?>
+<p>
+    Site de la société : <?=$this->escapeHtml($societe->getSiteWeb())?>
+</p>
+<?php endif; ?>
