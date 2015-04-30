@@ -10,6 +10,9 @@ class SocieteForm extends Form
     public function __construct() {
         parent::__construct('societe');
         
+        // Gestion de l'arrayCopy
+        $this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
+        
         $element = new Text('nom');
         $element->setLabel('Nom de la société : ');        
         $this->add($element);
