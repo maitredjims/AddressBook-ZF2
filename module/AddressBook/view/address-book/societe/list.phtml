@@ -18,10 +18,16 @@ h1 {
     <?php foreach ($societes as $societe): ?>
     <tr>
         <td>
-            <?=$this->escapeHtml($societe->getNom())?> <?=$this->escapeHtml($societe->getNom())?>
+            <?=$this->escapeHtml($societe->getNom())?>
         </td>
         <td>
             <a href="<?=$this->url('societe/show', array('id' => $this->escapeUrl($societe->getId())))?>" class="btn btn-primary btn-xs">Détails</a>
+        </td>
+        <td>
+            <a href="<?=$this->url('societe/update', array('id' => $this->escapeUrl($societe->getId())))?>" class="btn btn-primary btn-xs">Modifier</a>
+        </td>
+        <td>
+            <a href="<?=$this->url('societe/delete', array('id' => $this->escapeUrl($societe->getId())))?>" class="btn btn-primary btn-xs">Supprimer</a>
         </td>
     </tr>
     <?php endforeach; ?>
