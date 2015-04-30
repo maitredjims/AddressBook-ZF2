@@ -35,8 +35,8 @@ class SocieteDoctrineService implements SocieteServiceInterface
         $societe = new Societe();
 
         $hydrator = new DoctrineObject($this->em);
+        
         $form->setHydrator($hydrator);
-
         $form->bind($societe);
         $form->setInputFilter(new SocieteInputFilter());
         $form->setData($dataAssoc);
@@ -52,11 +52,32 @@ class SocieteDoctrineService implements SocieteServiceInterface
     }
 
     public function update($id, \Zend\Form\Form $form, $dataAssoc) {
+        $societe = $this->em->find('AddressBook\Entity\Societe', $id);
         
+        $hydrator = new DoctrineObject($this->em);
+        
+        $form->setHydrator($hydrator);
+        $form->bind($societe);
+        $form->setInputFilter(new SocieteInputFilter());
+        $form->setData($dataAssoc);
+        
+        if(!$form->isValid()) {
+            return null;
+        }
+        
+        $this->em->persist($societe);
+        $this->em->flush();
+        
+        return $societe;
     }
     
     public function delete($id) {
+        $societe = $this->em->find('AddressBook\Entity\Societe', $id);
         
+        $this->em->remove($societe);
+        $this->em->flush();
+        
+        return $societe;
     }
 
 }
