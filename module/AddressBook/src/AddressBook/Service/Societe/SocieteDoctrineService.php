@@ -25,10 +25,18 @@ class SocieteDoctrineService implements SocieteServiceInterface
         return $repo->findAll();
     }
 
-    public function getById($id) {
+    public function getById($id, $form = null) {
         $repo = $this->em->getRepository('AddressBook\Entity\Societe');
+        
+        $repoFind = $repo->find($id);
 
-        return $repo->find($id);
+        if ($form != null) {
+            $hydrator = new DoctrineObject($this->em);
+            $form->setHydrator($hydrator);
+            $form->bind($repoFind);
+        }
+
+        return $repoFind;
     }
 
     public function insert(\Zend\Form\Form $form, $dataAssoc) {
@@ -51,8 +59,8 @@ class SocieteDoctrineService implements SocieteServiceInterface
         return $societe;
     }
 
-    public function update($id, \Zend\Form\Form $form, $dataAssoc) {
-        $societe = $this->em->find('AddressBook\Entity\Societe', $id);
+    public function update($societe, \Zend\Form\Form $form, $dataAssoc) {
+        //$societe = $this->em->find('AddressBook\Entity\Societe', $id);
         
         $hydrator = new DoctrineObject($this->em);
         
