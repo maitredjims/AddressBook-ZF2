@@ -75,14 +75,16 @@ class SocieteController extends AbstractActionController {
         if (!$id) {
             return $this->redirect()->toRoute('societe');
         }
-
-        $societe = $this->societeService->getById($id);
-
+        
         $form = new SocieteForm();
-        $form->bind($societe);
+        $societe = $this->societeService->getById($id, $form);
+        
+        //var_dump($societe);
+                
+        //$form->bind($societe);
 
         if ($this->request->isPost()) {
-            $societe_update = $this->societeService->update($id, $form, $this->request->getPost());
+            $societe_update = $this->societeService->update($societe, $form, $this->request->getPost());
 
             if ($societe_update) {
                 return $this->redirect()->toRoute('societe');
@@ -90,7 +92,7 @@ class SocieteController extends AbstractActionController {
         }
 
         return new ViewModel(array(
-            'form' => $form,
+            'form' => $form->prepare(),
         ));
     }
 
