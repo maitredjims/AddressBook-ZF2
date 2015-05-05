@@ -28,7 +28,7 @@ class ContactDoctrineService implements ContactServiceInterface {
     public function getById($id, $form = null) {
         $repo = $this->em->getRepository('AddressBook\Entity\Contact');
         
-         $repoFind = $repo->find($id);
+        $repoFind = $repo->find($id);
 
         if ($form != null) {
             $hydrator = new DoctrineObject($this->em);
