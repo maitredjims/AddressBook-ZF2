@@ -7,14 +7,15 @@ return array(
 //            'AddressBook\Controller\Contact' => \AddressBook\Controller\ContactController::class
 //        ),
         'factories' => array(
-            'AddressBook\Controller\Contact' => function($cm) {
-                // cm => ControllerManager
-                $sm = $cm->getServiceLocator();
-                $contactService = $sm->get('AddressBook\Service\Contact');
-                $societeService = $sm->get('AddressBook\Service\Societe');
-                //$contactService = $sm->get('AddressBook\Service\ContactFake');
-                return new AddressBook\Controller\ContactController($contactService, $societeService);
-            },
+//            'AddressBook\Controller\Contact' => function($cm) {
+//                // cm => ControllerManager
+//                $sm = $cm->getServiceLocator();
+//                $contactService = $sm->get('AddressBook\Service\Contact');
+//                $societeService = $sm->get('AddressBook\Service\Societe');
+//                //$contactService = $sm->get('AddressBook\Service\ContactFake');
+//                return new AddressBook\Controller\ContactController($contactService, $societeService);
+//            },
+            'AddressBook\Controller\Contact' => AddressBook\Factory\Controller\ContactControllerFactory::class,
             'AddressBook\Controller\Societe' => function($cm) {
                 // cm => ControllerManager
                 $sm = $cm->getServiceLocator();
@@ -22,6 +23,12 @@ return array(
                 //$contactService = $sm->get('AddressBook\Service\ContactFake');
                 return new AddressBook\Controller\SocieteController($societeService);
             },
+        ),
+    ),
+    // Factory pour le formulaire
+    'form_elements' => array(
+        'factories' => array(
+            'AddressBook\Form\ContactForm' => AddressBook\Factory\Form\ContactFormFactory::class,
         ),
     ),
     'router' => array(
