@@ -10,6 +10,7 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\Form\FormInterface;
 
 class ContactController extends AbstractActionController
 {
@@ -58,10 +59,19 @@ class ContactController extends AbstractActionController
      */
     protected $societeService;
     
+    /**
+     *
+     * @var ContactForm
+     */
+    protected $contactForm;
 
-    public function __construct(ContactServiceInterface $contactService, SocieteServiceInterface $societeService) {
+
+
+    public function __construct(FormInterface $contactForm, ContactServiceInterface $contactService, SocieteServiceInterface $societeService) {
         $this->contactService = $contactService;
         $this->societeService = $societeService;
+        
+        $this->contactForm = $contactForm;
     }
 
     public function listAction()
@@ -78,7 +88,7 @@ class ContactController extends AbstractActionController
 
     public function addAction()
     {
-        $form = new ContactForm();
+        //$form = new ContactForm();
         
 //        if($this->request->isPost()) {
 //            $contact = new \AddressBook\Entity\Contact();            
@@ -102,16 +112,17 @@ class ContactController extends AbstractActionController
 //            }
 //        }
         
-        $societes= $this->societeService->getAll();
-        
-        // On enregistre les sociétés dans un tableau
-        foreach ($societes as $societe) {
-            $tabSociete[$societe->getId()] = $societe->getNom();
-        } 
+//        $societes= $this->societeService->getAll();
+//        
+//        // On enregistre les sociétés dans un tableau
+//        foreach ($societes as $societe) {
+//            $tabSociete[$societe->getId()] = $societe->getNom();
+//        } 
         
         if($this->request->isPost()) {
             
-            $contact = $this->contactService->insert($form, $this->request->getPost());
+            //$contact = $this->contactService->insert($form, $this->request->getPost());
+            $contact = $this->contactService->insert($this->contactForm, $this->request->getPost());
             
             if($contact) {
                 $this->flashMessenger()->addSuccessMessage('Le contact a bien été inséré');
@@ -122,8 +133,9 @@ class ContactController extends AbstractActionController
         }
         
         return new ViewModel(array(
-            'form' => $form,
-            'societes' => $tabSociete
+            //'form' => $form,
+            'form' => $this->contactForm,
+            //'societes' => $tabSociete
         ));
     }
 
@@ -134,7 +146,7 @@ class ContactController extends AbstractActionController
         $id = $this->params('id');
         
         //$contact = $service->getById($id);
-        $contact = $this->contactService->getById($id);
+        $contact = $this->contactService->getById($id, null);
         
         if(!$contact) {
             // Génération d'une réponse d'erreur
@@ -154,29 +166,34 @@ class ContactController extends AbstractActionController
             return $this->redirect()->toRoute('contact');
         }
         
-        $contact = $this->contactService->getById($id);
+        $form = $this->contactForm;
+        $contact = $this->contactService->getById($id, $form);
+        
+        //$form = new ContactForm();
                 
-        $form = new ContactForm();
-        $form->bind($contact);
+        //$form->bind($contact);
         
-        $societes= $this->societeService->getAll();
-        
-        // On enregistre les sociétés dans un tableau
-        foreach ($societes as $societe) {
-            $tabSociete[$societe->getId()] = $societe->getNom();
-        }        
+//        $societes= $this->societeService->getAll();
+//        
+//        // On enregistre les sociétés dans un tableau
+//        foreach ($societes as $societe) {
+//            $tabSociete[$societe->getId()] = $societe->getNom();
+//        }        
         
         if($this->request->isPost()) {
-            $contact_update = $this->contactService->update($id, $form, $this->request->getPost());
+            //$contact_update = $this->contactService->update($contact, $form, $this->request->getPost());
+            $contact_update = $this->contactService->update($contact, $this->contactForm, $this->request->getPost());
             
             if($contact_update) {
+                $this->flashMessenger()->addSuccessMessage('Le contact a bien été modifié.');
+                
                 return $this->redirect()->toRoute('contact');
             }
         }
         
         return new ViewModel(array(
-            'form' => $form,
-            'societes' => $tabSociete,
+            'form' => $form->prepare(),
+            //'societes' => $tabSociete,
         ));
     }
 
@@ -194,6 +211,8 @@ class ContactController extends AbstractActionController
             if ($del == 'Oui') {
                 $id = (int) $this->request->getPost('id');
                 $this->contactService->delete($id);
+                
+                $this->flashMessenger()->addSuccessMessage('Le contact a bien été supprimé.');
             }
 
             // Redirect to list of contact
