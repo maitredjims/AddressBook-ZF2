@@ -25,10 +25,19 @@ class ContactDoctrineService implements ContactServiceInterface {
         return $repo->findAll();
     }
 
-    public function getById($id) {
+    public function getById($id, $form = null) {
         $repo = $this->em->getRepository('AddressBook\Entity\Contact');
+        
+         $repoFind = $repo->find($id);
 
-        return $repo->find($id);
+        if ($form != null) {
+            $hydrator = new DoctrineObject($this->em);
+            $form->setHydrator($hydrator);
+            $form->bind($repoFind);
+        }
+
+        return $repoFind;
+        
     }
 
     public function getByIdWithSociete($id) {
@@ -62,8 +71,8 @@ class ContactDoctrineService implements ContactServiceInterface {
         return $contact;
     }
     
-    public function update($id, \Zend\Form\Form $form, $dataAssoc) {
-        $contact = $this->em->find('AddressBook\Entity\Contact', $id);
+    public function update($contact, \Zend\Form\Form $form, $dataAssoc) {
+        //$contact = $this->em->find('AddressBook\Entity\Contact', $id);
         
         $hydrator = new DoctrineObject($this->em);
         
