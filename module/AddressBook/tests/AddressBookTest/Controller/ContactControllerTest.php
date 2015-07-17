@@ -32,7 +32,7 @@ class ContactControllerTest extends AbstractHttpControllerTestCase
     
     /*
     // Problème : test dépendant de la base de données. Il faudrait remplir la base avant chaque test.
-    public function testShowActionContainsContact() {
+    public function testShowActionContainsContactWithMysql() {
         $this->dispatch('/contact/2');
         
         // On vérifie via un sélecteur CSS (attetion, tous n'existent pas) qu'il y a bien 3 paragraphes
@@ -71,17 +71,17 @@ class ContactControllerTest extends AbstractHttpControllerTestCase
         $mockService->expects($this->once())
                 ->method('getById')
                 ->willReturn((new \AddressBook\Entity\Contact)
-                        ->setId('10')
-                        ->setPrenom('Barack')
-                        ->setNom('Obama'));
+                        ->setId('1')
+                        ->setPrenom('Zinedine')
+                        ->setNom('Zidane'));
         
         $this->getApplicationServiceLocator()
                 ->setAllowOverride(true)
                 ->setService('AddressBook\Service\Contact', $mockService);
         
-        $this->dispatch('/contact/10');
-        
-        $this->assertContains('Barack', $this->getResponse()->getContent());
-        $this->assertContains('Obama', $this->getResponse()->getContent());
+        $this->dispatch('/contact/1');
+        $this->assertQueryCount('p', 4);
+        $this->assertContains('Zinedine', $this->getResponse()->getContent());
+        $this->assertContains('Zidane', $this->getResponse()->getContent());
     }
 }
